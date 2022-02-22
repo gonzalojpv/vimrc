@@ -1,0 +1,362 @@
+set nocompatible " usar Vim en lugar de Vi, requerido para que funcione el gestor
+set encoding=UTF-8
+filetype plugin indent on " requerido para que funcione el gestor
+
+let g:nerdtree_tabs_open_on_console_startup = 1
+set laststatus=2
+" let g:ale_fix_on_save = 1
+
+set rtp+=~/.vim/bundle/Vundle.vim
+
+call vundle#begin()
+Plugin 'gmarik/Vundle.vim'
+
+highlight clear SignColumn " muestra barra a la izquierda con los cambios
+
+Plugin 'neoclide/coc.nvim', {'branch': 'release'}
+Plugin 'scrooloose/nerdtree'
+Plugin 'Xuyuanp/nerdtree-git-plugin'
+Plugin 'tiagofumo/vim-nerdtree-syntax-highlight'
+Plugin 'ryanoasis/vim-devicons'
+Plugin 'airblade/vim-gitgutter'
+Plugin 'ctrlpvim/ctrlp.vim'
+Plugin 'preservim/nerdcommenter'
+Plugin 'christoomey/vim-tmux-navigator'
+" Plugin 'easymotion/vim-easymotion'
+Plugin 'yggdroot/indentline'
+
+" Plugin 'morhetz/gruvbox'
+Plugin 'sainnhe/gruvbox-material'
+
+Plugin 'tpope/vim-fugitive'
+Plugin 'itchyny/vim-gitbranch'
+
+" html
+"" HTML Bundle
+Plugin 'hail2u/vim-css3-syntax'
+" Plugin 'gko/vim-coloresque'
+Plugin 'tpope/vim-haml'
+" Plugin 'mattn/emmet-vim'
+" Plugin 'valloric/matchtagalways'
+
+" javascript
+"" Javascript Bundle
+Plugin 'jelera/vim-javascript-syntax'
+Plugin 'heavenshell/vim-jsdoc'
+
+" typescript
+Plugin 'leafgarland/typescript-vim'
+Plugin 'herringtondarkholme/yats.vim'
+
+Plugin 'itchyny/lightline.vim'
+
+Plugin 'jparise/vim-graphql'
+
+" Plugin 'Konfekt/FastFold'
+
+" vuejs
+" Plugin 'posva/vim-vue'
+Plugin 'leafOfTree/vim-vue-plugin'
+
+call vundle#end()
+
+let mapleader=" "
+
+" UI Layout {{{
+set number              " show line numbers
+set noshowcmd             "no show command in bottom bar
+set nocursorline        " highlight current line
+set wildmenu
+set lazyredraw          " redraw only when we need to.
+set showmatch           " higlight matching parenthesis
+set smarttab
+set cindent
+set ttyfast
+set noruler
+" set showmode "Show current mode down the bottom
+set noshowmode
+set autoread                    "Reload files changed outside vim
+set title
+set hidden
+" No backups
+set nobackup
+set nowritebackup
+set nowb
+set noswapfile
+" Keep lots of history/undo
+set undolevels=1000
+" Files to ignore
+" Python
+set wildignore+=*.pyc,*.pyo,*/__pycache__/*
+" Erlang
+set wildignore+=*.beam
+" Temp files
+set wildignore+=*.swp,~*
+" Archives
+set wildignore+=*.zip,*.tar
+" always uses spaces instead of tab characters
+set expandtab
+set termguicolors     " enable true colors support
+set fillchars+=vert:┃
+set guioptions=  """ scrollbar
+
+""" Always highlight enclosing tags
+" let g:mta_use_matchparen_group = 0
+" let g:mta_set_default_matchtag_color = 0
+" highlight MatchTag ctermfg=black ctermbg=lightgreen guifg=black guibg=lightgreen
+" let g:mta_filetypes = {
+ "   \ 'html' : 1,
+  "  \ 'xhtml' : 1,
+  "  \ 'xml' : 1,
+  "  \ 'vue' : 1,
+  "  \ 'blade.php' : 1,
+  "  \}
+" }}}
+
+" Colors {{{
+set t_Co=256
+colorscheme gruvbox-material
+let g:gruvbox_contrast_dark = 'soft'
+set guifont=Hack_Nerd_Font:h14
+let g:lightline = {
+      \ 'active': {
+      \   'left': [ [ 'mode', 'paste' ],
+      \             [ 'gitbranch', 'readonly', 'filename', 'modified' ] ]
+      \ },
+      \ 'component_function': {
+      \   'gitbranch': 'fugitive#head'
+      \ },
+      \ }
+" }}}
+
+" NERDTree {{{
+let NERDTreeQuitOnOpen=1
+let g:NERDTreeIgnore = ['^node_modules$']
+map <C-n> :NERDTreeToggle<CR>
+nnoremap <D-Bslash> :NERDTreeToggle<CR>
+vnoremap <D-Bslash> :NERDTreeToggle<CR>
+let g:NERDTreeDirArrowExpandable = '▸'
+let g:NERDTreeDirArrowCollapsible = '▾'
+let g:NERDTreeGitStatusPorcelainVersion = 1
+let g:NERDTreeGitStatusWithFlags = 1
+" }}}
+
+" ESLint {{{
+" let g:ale_fix_on_save = 1 
+" command! -nargs=0 Prettier :CocCommand prettier.formatFile
+" }}}
+" CtrlP {{{
+let g:ctrlp_match_window = 'bottom,order:ttb'
+let g:ctrlp_switch_buffer = 0
+let g:ctrlp_working_path_mode = 0
+let g:ctrlp_custom_ignore = '\vbuild/|dist/|node_modules/|venv/|target/|\.(o|swp|pyc|egg)$'
+let g:ctrlp_map = '<c-p>'
+"let g:ctrlp_cmd = 'CtrlP'
+let g:ctrlp_user_command = ['.git/', 'git --git-dir=%s/.git ls-files -oc --exclude-standard']
+nnoremap <Leader>fu :CtrlPFunky<Cr>
+nnoremap <Leader>fU :execute 'CtrlPFunky ' . expand('<cword>')<Cr>
+let g:ctrlp_funky_matchtype = 'path'
+nnoremap <leader>m :CtrlPMixed<CR>
+nnoremap <leader>l :CtrlPLine<CR>
+nnoremap <leader>b :CtrlPBuffer<CR>
+nnoremap <leader>p :CtrlP<CR>
+" }}}
+
+" Spaces & Tabs {{{
+set modelines=1
+set expandtab           " use spaces for tabs
+set tabstop=4           " 4 space tab
+set softtabstop=2       " 4 space tab
+set shiftwidth=2 " Indents will have a width of 4
+set autoindent
+set smartindent
+set smarttab
+set backspace=indent,eol,start  " backspace through everything in insert mode
+set nowrap                      " don't wrap lines
+
+filetype indent on
+filetype plugin on
+
+nmap <Leader>a= :Tabularize /=<CR>
+vmap <Leader>a= :Tabularize /=<CR>
+nmap <Leader>a: :Tabularize /:\zs<CR>
+vmap <Leader>a: :Tabularize /:\zs<CR>
+" }}}
+
+" Folding {{{
+"=== folding ===
+set foldmethod=indent   " fold based on indent level
+set foldnestmax=10      " max 10 depth
+set foldenable          " don't fold files by default on open
+nnoremap <space> za
+set foldlevelstart=10   " start with fold level of 1
+
+""" Konfekt/FastFold
+" let g:markdown_folding = 1
+" let g:tex_fold_enabled = 1
+" let g:vimsyn_folding = 'af'
+" let g:xml_syntax_folding = 1
+" let g:javaScript_fold = 1
+" let g:sh_fold_enabled= 7
+" let g:ruby_fold = 1
+" let g:perl_fold = 1
+" let g:perl_fold_blocks = 1
+" let g:r_syntax_folding = 1
+" let g:rust_fold = 1
+" let g:php_folding = 1
+" }}}
+" Searching {{
+set ignorecase          " ignore case when searching
+set incsearch           " search as characters are entered
+set hlsearch            " highlight all matches
+nmap <Leader>s <Plug>(easymotion-s2)
+set hlsearch                    " highlight matches
+set incsearch                   " incremental searching
+set ignorecase                  " searches are case insensitive...
+set smartcase                   " ... unless they contain at least one capital letter
+set cursorline
+" }}
+
+
+" coc config {{{
+set updatetime=300
+" don't give |ins-completion-menu| messages.
+set shortmess+=c
+" always show signcolumns
+set signcolumn=yes
+let g:coc_global_extensions = [
+  \ 'coc-snippets',
+  \ 'coc-pairs',
+  \ 'coc-tsserver',
+  \ 'coc-eslint', 
+  \ 'coc-prettier', 
+  \ 'coc-json', 
+  \ ]
+
+" Remap for rename current word
+"nmap <F2> <Plug>(coc-rename)
+
+" Remap for format selected region
+" xmap <leader>f  <Plug>(coc-format-selected)
+" nmap <leader>f  <Plug>(coc-format-selected)
+
+"augroup mygroup
+  "autocmd!
+  " Setup formatexpr specified filetype(s).
+  "autocmd FileType typescript,json,vue setl formatexpr=CocAction('formatSelected')
+  " Update signature help on jump placeholder
+  "autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
+"augroup end
+
+" Highlight symbol under cursor on CursorHold
+autocmd CursorHold * silent call CocActionAsync('highlight')
+
+" Use `:Format` to format current buffer
+"command! -nargs=0 Format :call CocAction('format')
+
+" Use `:Fold` to fold current buffer
+"command! -nargs=? Fold :call     CocAction('fold', <f-args>)
+
+" use `:OR` for organize import of current buffer
+"command! -nargs=0 OR   :call     CocAction('runCommand', 'editor.action.organizeImport')
+
+" Add status line support, for integration with other plugin, checkout `:h coc-status`
+set statusline^=%{coc#status()}%{get(b:,'coc_current_function','')}
+
+"function! s:check_back_space() abort
+  "let col = col('.') - 1
+  "return !col || getline('.')[col - 1]  =~# '\s'
+"endfunction
+
+"function! s:show_documentation()
+  "if (index(['vim','help'], &filetype) >= 0)
+    "execute 'h '.expand('<cword>')
+  "else
+    "call CocAction('doHover')
+  "endif
+"endfunction
+" }}}
+
+" Fix common {{{
+:command WQ wq
+:command Wq wq
+:command W w
+:command Q q
+
+map <D-s> :w<kEnter>
+imap <C-s> <ESC>:w<kEnter>m
+imap <D-s> <ESC>:w<kEnter>m
+imap <D-S> <ESC>:w<kEnter>m
+imap <M-s> <ESC>:w<kEnter>m
+imap <A-s> <ESC>:w<kEnter>m
+imap <M-S> <ESC>:w<kEnter>m
+imap <A-S> <ESC>:w<kEnter>m
+imap \<C-s> <ESC>:w<kEnter>m
+"nnoremap <D-s> :w<CR> 
+" normal mode: save 
+"inoremap <D-s> <Esc>:w<CR>l 
+" insert mode: escape to normal and save
+"vnoremap <D-s> <Esc>:w<CR> 
+" visual mode: escape to normal and save
+" Works in insert mode, saves and puts back in insert mode
+" }}}
+"*****************************************************************************
+"" Mappings
+"*****************************************************************************
+
+"" Split
+noremap <Leader>h :<C-u>split<CR>
+noremap <Leader>v :<C-u>vsplit<CR>
+
+if !has('gui_running')
+  set t_Co=256
+endif
+
+let g:vim_vue_plugin_config = { 
+      \'syntax': {
+      \   'template': ['html'],
+      \   'script': ['javascript', 'typescript'],
+      \   'style': ['css', 'scss'],
+      \   'i18n': ['json', 'yaml'],
+      \},
+      \'full_syntax': ['json'],
+      \'initial_indent': [],
+      \'attribute': 1,
+      \'keyword': 1,
+      \'foldexpr': 1,
+      \'debug': 0,
+      \}
+
+" javascript
+let g:javascript_enable_domhtmlcss = 1
+let g:vim_vue_plugin_load_full_syntax = 1
+
+" Create default mappings
+let g:NERDCreateDefaultMappings = 1
+
+" Add spaces after comment delimiters by default
+let g:NERDSpaceDelims = 1
+
+" Use compact syntax for prettified multi-line comments
+let g:NERDCompactSexyComs = 1
+
+" Align line-wise comment delimiters flush left instead of following code indentation
+let g:NERDDefaultAlign = 'left'
+
+" Set a language to use its alternate delimiters by default
+let g:NERDAltDelims_java = 1
+
+" Add your own custom formats or override the defaults
+let g:NERDCustomDelimiters = { 'c': { 'left': '/**','right': '*/' } }
+
+" Allow commenting and inverting empty lines (useful when commenting a region)
+let g:NERDCommentEmptyLines = 1
+
+" Enable trimming of trailing whitespace when uncommenting
+let g:NERDTrimTrailingWhitespace = 1
+
+" Enable NERDCommenterToggle to check all selected lines is commented or not 
+let g:NERDToggleCheckAllLines = 1
+
+let g:jsdoc_formatter='jsdoc'
+let g:jsdoc_lehre_path='~/.vim/bundle/vim-jsdoc/lib/node_modules/.bin/lehre'
